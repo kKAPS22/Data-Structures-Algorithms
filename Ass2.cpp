@@ -361,228 +361,207 @@ int main(){
     return 0;
 }*/
 
-/*Duplicate zero */
+/*Inversion Counting */
+// #include<bits/stdc++.h>
+// using namespace std;
+
+// int  inversion(int A[],int n){
+//   int count=0;
+//     for(int i=0;i<n;i++){  
+//        for(int j=i+1;j<n;j++){    
+//              if(A[i]>A[j]&&i<j){
+//                   count ++;
+//               }
+//         }
+//     }
+//   return count;
+// }
+
+
+// int main(){
+//     int arr[]={12,14,16,18,5,21,17,10,11};
+//     int n=sizeof(arr)/sizeof(arr[0]);
+    
+//     cout<<inversion(arr,n);
+//     return 0;
+// }
+
+//brute force Approach 
 /*
-#include <iostream>
+#include<bits/stdc++.h>
 using namespace std;
 
-void duplicateTwos(int arr[], int n) {
-    int countTwos = 0;
+void CountPairsDifference(int A[],int k,int n){
+    
+    for(int i=0;i<n;i++){
+        for(int j=i+1;j<n;j++){
+            if((A[i]-A[j])==k){
+                cout<<"the value of i "<<"and j "<<i<<","<<j;
+                cout<<"\n";
 
-    // Count how many 2s will be duplicated without exceeding array length
-    for (int i = 0; i < n; ++i) {
-        if (arr[i] == 2) {
-            countTwos++;
+            }
         }
-    }
 
-    int i = n - 1;               // Original array index
-    int j = n + countTwos - 1;  // Target index after duplication (might be out of bound)
-
-    // Work backward from the end
-    while (i >= 0 && j >= 0) {
-        if (arr[i] == 2) {
-            // Duplicate 2s if j is within bounds
-            if (j < n) arr[j] = 2;
-            j--;
-            if (j < n) arr[j] = 2;
-            j--;
-        } else {
-            if (j < n) arr[j] = arr[i];
-            j--;
-        }
-        i--;
     }
 }
 
-int main() {
-    int arr[] = {1, 2, 3, 2, 4, 5};
-    int n = sizeof(arr) / sizeof(arr[0]);
+int main(){
+    int arr[]={13,12,11,10,9,8,7,6,5};
+    int n=sizeof(arr)/sizeof(arr[0]);
+    int k=3;
 
-    duplicateTwos(arr, n);
-
-    for (int i = 0; i < n; ++i) {
-        cout << arr[i] << " ";
-    }
-    cout << endl;
-
+    CountPairsDifference(arr,k,n);
     return 0;
 }*/
 
-
-/*Sparse matrix*/
-/*
-#include <iostream>
+//Optimized code --->o(n log n)
+/*#include<bits/stdc++.h>
 using namespace std;
 
-const int MAX = 100;
+int CountPairsDifference(int A[],int n,int k){
+    sort(A,A+n);
+    int count=0;
+    int i=0;
+    int j=1;
 
-struct SparseMatrix {
-    int rows, cols, nonZero;
-    int row[MAX], col[MAX], val[MAX];
-};
-
-void printSparse(const SparseMatrix &mat) {
-    cout << "Row Col Val\n";
-    for (int i = 0; i < mat.nonZero; i++) {
-        cout << mat.row[i] << "   " << mat.col[i] << "   " << mat.val[i] << "\n";
-    }
-}
-
-SparseMatrix transpose(const SparseMatrix &mat) {
-    SparseMatrix result;
-    result.rows = mat.cols;
-    result.cols = mat.rows;
-    result.nonZero = mat.nonZero;
-
-    int k = 0;
-    for (int c = 0; c < mat.cols; c++) {
-        for (int i = 0; i < mat.nonZero; i++) {
-            if (mat.col[i] == c) {
-                result.row[k] = mat.col[i];
-                result.col[k] = mat.row[i];
-                result.val[k] = mat.val[i];
-                k++;
-            }
-        }
-    }
-    return result;
-}
-
-SparseMatrix add(const SparseMatrix &A, const SparseMatrix &B) {
-    SparseMatrix result;
-    result.rows = A.rows;
-    result.cols = A.cols;
-    result.nonZero = 0;
-
-    if (A.rows != B.rows || A.cols != B.cols) {
-        cout << "Dimension mismatch!\n";
-        return result;
-    }
-
-    int i = 0, j = 0;
-    while (i < A.nonZero && j < B.nonZero) {
-        int posA = A.row[i]*A.cols + A.col[i];
-        int posB = B.row[j]*B.cols + B.col[j];
-
-        if (posA == posB) {
-            int summed = A.val[i] + B.val[j];
-            if (summed != 0) {
-                result.row[result.nonZero] = A.row[i];
-                result.col[result.nonZero] = A.col[i];
-                result.val[result.nonZero++] = summed;
-            }
-            i++; j++;
-        } else if (posA < posB) {
-            result.row[result.nonZero] = A.row[i];
-            result.col[result.nonZero] = A.col[i];
-            result.val[result.nonZero++] = A.val[i];
+    while(j<n){
+        if(A[j]-A[i]==k){
+            count++;
             i++;
-        } else {
-            result.row[result.nonZero] = B.row[j];
-            result.col[result.nonZero] = B.col[j];
-            result.val[result.nonZero++] = B.val[j];
             j++;
-        }
-    }
-    while (i < A.nonZero) {
-        result.row[result.nonZero] = A.row[i];
-        result.col[result.nonZero] = A.col[i];
-        result.val[result.nonZero++] = A.val[i++];
-    }
-    while (j < B.nonZero) {
-        result.row[result.nonZero] = B.row[j];
-        result.col[result.nonZero] = B.col[j];
-        result.val[result.nonZero++] = B.val[j++];
-    }
-
-    return result;
-}
-
-SparseMatrix multiply(const SparseMatrix &A, const SparseMatrix &B) {
-    SparseMatrix result;
-    result.rows = A.rows;
-    result.cols = B.cols;
-    result.nonZero = 0;
-
-    if (A.cols != B.rows) {
-        cout << "Dimension mismatch for multiplication!\n";
-        return result;
-    }
-
-   
-    for (int i = 0; i < A.nonZero; i++) {
-        for (int j = 0; j < B.nonZero; j++) {
-            if (A.col[i] == B.row[j]) {
-                int r = A.row[i];
-                int c = B.col[j];
-                int v = A.val[i] * B.val[j];
-
-                // Check if already exists at (r,c)
-                bool found = false;
-                for (int k = 0; k < result.nonZero; k++) {
-                    if (result.row[k] == r && result.col[k] == c) {
-                        result.val[k] += v;
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    result.row[result.nonZero] = r;
-                    result.col[result.nonZero] = c;
-                    result.val[result.nonZero++] = v;
-                }
+        }else if(A[j]-A[i]<k){
+            j++;
+        }else{
+            i++;
+            if(i==j){
+                j++;
             }
         }
     }
-
-    // Remove zeros if any
-    int k = 0;
-    for (int i = 0; i < result.nonZero; i++) {
-        if (result.val[i] != 0) {
-            result.row[k] = result.row[i];
-            result.col[k] = result.col[i];
-            result.val[k] = result.val[i];
-            k++;
-        }
-    }
-    result.nonZero = k;
-
-    return result;
+    return count;
 }
 
 int main() {
-    SparseMatrix A, B;
+    int arr[] = {5, 6, 7, 8, 9, 10, 11, 12, 13};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int k = 3;
 
-    // Initialize matrix A
-    A.rows = 3; A.cols = 3; A.nonZero = 4;
-    A.row[0] = 0; A.col[0] = 0; A.val[0] = 1;
-    A.row[1] = 0; A.col[1] = 2; A.val[1] = 2;
-    A.row[2] = 1; A.col[2] = 1; A.val[2] = 3;
-    A.row[3] = 2; A.col[3] = 0; A.val[3] = 4;
-
-    // Initialize matrix B
-    B.rows = 3; B.cols = 3; B.nonZero = 4;
-    B.row[0] = 0; B.col[0] = 1; B.val[0] = 5;
-    B.row[1] = 1; B.col[1] = 0; B.val[1] = 6;
-    B.row[2] = 1; B.col[2] = 2; B.val[2] = 7;
-    B.row[3] = 2; B.col[3] = 2; B.val[3] = 8;
-
-    cout << "Matrix A (triplets):\n"; printSparse(A);
-    cout << "\nMatrix B (triplets):\n"; printSparse(B);
-
-    cout << "\nTranspose of A:\n";
-    SparseMatrix At = transpose(A);
-    printSparse(At);
-
-    cout << "\nAddition A + B:\n";
-    SparseMatrix sum = add(A, B);
-    printSparse(sum);
-
-    cout << "\nMultiplication A * B:\n";
-    SparseMatrix prod = multiply(A, B);
-    printSparse(prod);
-
+    cout << CountPairsDifference(arr, n, k); // Output: 6
     return 0;
 }*/
+
+//most optimized
+/*
+#include<bits/stdc++.h>
+using namespace std;
+
+int CountPairsDifference(int A[],int n,int k){
+    int count=0;
+    unordered_set<int> s;
+    for(int i=0;i<n;i++){
+        s.insert(A[i]);
+    }
+
+    for(int i=0;i<n;i++){
+        if(s.count(A[i]+k)){
+            count++;
+        }
+    }
+    return count;
+}
+int main() {
+    int arr[] = {5, 6, 7, 8, 9, 10, 11, 12, 13};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int k = 3;
+
+    cout << CountPairsDifference(arr, n, k); // Output: 6
+    return 0;
+}*/
+
+/*) String Split Challenge 
+You are given a string consisting of lowercase English alphabets. Your task is to determine 
+if it's possible to split this string into three non-empty parts (substrings) where one of 
+these parts is a substring of both remaining parts  in cpp*/
+// #include<bits/stdc++.h>
+// #include<string>
+// using namespace std;
+
+// bool isSubstring(const string& s1, const string& s2) {
+//     return s2.find(s1) != string::npos;
+// }
+// int main(){
+//     string s;
+//     cin>>s;
+//     int n =(int)s.size();
+
+//     for(int i=1;i<n;i++){
+//         for(int j=i+1;j<n;j++){
+//             string A=s.substr(0,i);
+//             string B=s.substr(i,j-i);
+//             string C=s.substr(j);
+
+
+//             if(isSubstring(A,B) && isSubstring(A,C)){
+//                  cout<<"YES\n";
+//                  return 0;
+//             }
+//             if (isSubstring(B, A) && isSubstring(B, C)) {
+//                 cout << "YES\n";
+//                 return 0;
+//             }
+//             if (isSubstring(C, A) && isSubstring(C, B)) {
+//                 cout << "YES\n";
+//                 return 0;
+
+//         }
+//     }
+//     }
+//     cout<<"No\n";
+//     return 0;
+// }
+
+
+
+
+/*Brute Force Approach */
+// void SortArrayOf012(int arr[],int n){
+//     int cnt0;int cnt1;int cnt2=0;
+//     for(int i=0;i<n;i++){
+//         if(arr[i]==0){
+//             cnt0++;
+//         }else if( arr[i]==1){
+//             cnt1++;
+//         }else{
+//             cnt2++;
+//         }
+//     }
+
+//     for(int i=0;i<cnt0;i++){
+//         arr[i]={0};
+//     }
+//     for(int i=cnt0;i<cnt0+cnt1;i++){
+//         arr[i]={1};
+//     }
+//     for(int i=cnt0+cnt1;i<n;i++){
+//         arr[i]={2};
+//     }
+// }
+
+
+// void SortArray012(int arr[],int n){
+//     //Dutch National Flag 
+
+//     int low=0,mid=0,high=n-1;
+//     while(mid<=high){
+//     if(arr[mid]==0){
+//         swap(arr[mid],arr[low]);
+//         mid++,low++;
+//     }else if(arr[mid]==1){
+//         mid++;
+//     }else{
+//         swap(arr[mid],arr[high]);
+//         high--;
+//     }
+// }
+// }
 

@@ -272,19 +272,19 @@
 //         i++;
 //     }
 
-    // // Pop all remaining operators
-    // while(!st.empty()) {
-    //     ans += st.top();
-    //     st.pop();
-    // }
+//     // Pop all remaining operators
+//     while(!st.empty()) {
+//         ans += st.top();
+//         st.pop();
+//     }
 
-    // return ans;
+//     return ans;
 // }
 
 // int main(){
-    // string infix = "a+b*(c^d-e)^(f+g*h)-i";
-    // cout << "Postfix: " << InfixtoPostfix(infix) << "\n";
-    // return 0;
+//     string infix = "a+b*(c^d-e)^(f+g*h)-i";
+//     cout << "Postfix: " << InfixtoPostfix(infix) << "\n";
+//     return 0;
 // }
 
 //Infix to prefix
@@ -367,7 +367,7 @@ string InfixtoPrefix(string& s){
            else{
             if(s[i]=='^'){
                 while(!st.empty() && priority(s[i])<=priority(st.top()) ){
-                    ans=ans+st.top();
+                    ans=ans+st.top(); 
                     st.pop();
                 }
             }
@@ -382,7 +382,7 @@ string InfixtoPrefix(string& s){
            }
        i++;   
     }
-        // Pop all remaining operators
+    // Pop all remaining operators
     while(!st.empty()) {
         ans += st.top();
         st.pop();
@@ -403,4 +403,137 @@ int main(){
     return 0;
 }*/
 
-//Implement get-Min stack
+//previous smaller element
+/*
+#include<bits/stdc++.h>
+using namespace std;
+
+void previousSmallerElement(int A[],int n,int result[]){
+    stack<int>st;
+
+    for(int i=0;i<n;i++){
+
+        while(!st.empty()){
+            if(st.top()<A[i]){
+                break;
+            }else{
+                st.pop();
+            }
+        }
+
+        if(st.empty()){
+            result[i]=-1;
+        }else{
+            result[i]=st.top();
+        }
+    
+        st.push(A[i]);
+
+    }
+}
+int main() {
+    int A[] = {3,2,1};
+    int n = sizeof(A) / sizeof(A[0]);
+    int result[n];
+
+    previousSmallerElement(A, n, result);
+
+    for (int i = 0; i < n; ++i) {
+        cout << result[i] << " ";
+    }
+    cout << endl;  // Output: -1 4 -1 2 2
+
+    return 0;
+}*/
+
+//Daily Temperatures
+/*
+#include<bits/stdc++.h>
+using namespace std;
+
+//Brute force
+/*
+ void  DailyTemperatures(int A[],int n,int answer[]){
+    for(int i=0;i<n;i++){
+   answer[i]=0;//supposing all the days are warmer 
+   for(int j=i+1;j<n;j++){
+    if(A[j]>A[i]){
+        answer[i]=j-i;
+        break;
+    }
+   }
+    }
+ }
+
+ //stack Approach 
+ void DailyTemperatures(int A[],int n,int answer[]){
+    stack<int> st;
+
+    for(int i=0;i<n;i++){
+    while(!st.empty() && A[i]>A[st.top()]){
+        int j=st.top();
+        st.pop();
+        answer[j]=i-j;
+    }
+        st.push(i);
+    }
+
+    while(!st.empty()){
+        answer[st.top()]=0;
+        st.pop();
+    }
+
+
+
+ }
+int main(){
+    int A[]={73,74,75,71,69,72};
+    int n=sizeof(A)/sizeof(A[0]);
+    
+    int answer[n];
+    DailyTemperatures(A,n,answer);
+    for(int i=0;i<n;i++){
+        cout<<answer[i]<<" ";
+    }
+    return 0;
+}
+*/
+
+//Next Greater element 
+// #include<bits/stdc++.h>
+// using namespace std;
+
+// void NextGreaterElement(int A[],int n,int result[]){
+//     stack<int> st;
+//     for(int i=0;i<n;i++){
+//         while(!st.empty()){
+//             if(A[i]>A[st.top()]){
+//                 int j=st.top();
+//                 st.pop();
+//                 result[j]=A[i];
+//             }else{
+//                 break;
+//             }
+//         }
+//         st.push(i);
+//     }
+
+//     while(!st.empty()){
+//         result[st.top()]=-1;
+//         st.pop();
+//     }
+// }
+
+// int main(){
+ 
+//     int A[]={1,3,2,4};
+//     int n=sizeof(A)/sizeof(A[0]);
+//     int result[n];
+
+//     NextGreaterElement(A,n,result);
+     
+//     for(int i=0;i<n;i++){
+//         cout<<result[i]<<" ";
+//     }
+//     return 0;
+// }
